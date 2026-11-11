@@ -8,3 +8,5 @@ BBD3
 *.ipa
 *.bar
 *.app/
+# app icon is Gameloft art: generate it locally with tools/make_icon.py
+sce_sys/icon0.png

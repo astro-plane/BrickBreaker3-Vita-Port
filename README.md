@@ -21,6 +21,9 @@ Requires VitaSDK with vitaGL, vitashark, mathneon and kubridge (`kubridge.skprx`
 ./go.sh                                                        # build + upload (first time: install bb3.vpk with VitaShell)
 ./logs.sh                                                      # fetch ux0:data/bb3/loader.txt
 ```
+App icon (optional, from your IPA; needs Python with Pillow): unzip the IPA, then
+`python3 tools/make_icon.py Payload/BBD3.app/Icon@2x.png sce_sys/icon0.png` before `./go.sh`.
+
 Set `VITA=<ip>` if your Vita is not at 192.168.0.19 (VitaShell FTP, port 1337).
 
 ## Controls

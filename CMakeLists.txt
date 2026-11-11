@@ -26,4 +26,10 @@ target_link_libraries(bb3 -Wl,--whole-archive pthread -Wl,--no-whole-archive
   -Wl,--start-group vitashark SceShaccCgExt mathneon ${VGL_STUBS} -Wl,--end-group stdc++
   m kubridge_stub ScePower_stub SceTouch_stub SceCtrl_stub SceAudio_stub SceIofilemgr_stub SceSysmem_stub SceLibKernel_stub)
 vita_create_self(bb3.self bb3 UNSAFE)
-vita_create_vpk(bb3.vpk BBRK00003 bb3.self VERSION 00.01 NAME "Block Breaker 3")
+# App icon: made from your own IPA (tools/make_icon.py) - Gameloft's art is not part of the repository
+if(EXISTS ${CMAKE_SOURCE_DIR}/sce_sys/icon0.png)
+  vita_create_vpk(bb3.vpk BBRK00003 bb3.self VERSION 01.00 NAME "Block Breaker 3"
+    FILE ${CMAKE_SOURCE_DIR}/sce_sys/icon0.png sce_sys/icon0.png)
+else()
+  vita_create_vpk(bb3.vpk BBRK00003 bb3.self VERSION 01.00 NAME "Block Breaker 3")
+endif()

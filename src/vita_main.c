@@ -24,7 +24,7 @@
 #endif
 
 #define LOAD_BASE 0x98000000u   /* guest vmaddr vm_low (0x1000) is mapped here */
-#define BUILD_TAG "bb3-update028"
+#define BUILD_TAG "bb3-update029"
 /* The game allocates through malloc/new (the C library heap), not sbrk: give that heap the room. The default was too
  * small - new(67 KB) for the music player returned NULL after ~18 MB were in use. */
 int _newlib_heap_size_user = 128 * 1024 * 1024;
