@@ -1,0 +1,10 @@
+build/
+out/
+*.vpk
+*.self
+*.elf
+# never commit game files
+BBD3
+*.ipa
+*.bar
+*.app/
