@@ -27,7 +27,13 @@ target_link_libraries(bb3 -Wl,--whole-archive pthread -Wl,--no-whole-archive
   m kubridge_stub ScePower_stub SceTouch_stub SceCtrl_stub SceAudio_stub SceIofilemgr_stub SceSysmem_stub SceLibKernel_stub)
 vita_create_self(bb3.self bb3 UNSAFE)
 # App icon: made from your own IPA (tools/make_icon.py) - Gameloft's art is not part of the repository
-if(EXISTS ${CMAKE_SOURCE_DIR}/sce_sys/icon0.png)
+if(EXISTS ${CMAKE_SOURCE_DIR}/sce_sys/livearea/contents/bg.png AND EXISTS ${CMAKE_SOURCE_DIR}/sce_sys/icon0.png)
+  vita_create_vpk(bb3.vpk BBRK00003 bb3.self VERSION 01.00 NAME "Block Breaker 3"
+    FILE ${CMAKE_SOURCE_DIR}/sce_sys/icon0.png sce_sys/icon0.png
+    FILE ${CMAKE_SOURCE_DIR}/sce_sys/livearea/contents/bg.png sce_sys/livearea/contents/bg.png
+    FILE ${CMAKE_SOURCE_DIR}/sce_sys/livearea/contents/startup.png sce_sys/livearea/contents/startup.png
+    FILE ${CMAKE_SOURCE_DIR}/sce_sys/livearea/contents/template.xml sce_sys/livearea/contents/template.xml)
+elseif(EXISTS ${CMAKE_SOURCE_DIR}/sce_sys/icon0.png)
   vita_create_vpk(bb3.vpk BBRK00003 bb3.self VERSION 01.00 NAME "Block Breaker 3"
     FILE ${CMAKE_SOURCE_DIR}/sce_sys/icon0.png sce_sys/icon0.png)
 else()

@@ -10,3 +10,4 @@ BBD3
 *.app/
 # app icon is Gameloft art: generate it locally with tools/make_icon.py
 sce_sys/icon0.png
+sce_sys/livearea/contents/*.png
