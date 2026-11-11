@@ -82,7 +82,9 @@ static FILE *w_fopen(const char *p, const char *m) {
     if (f && p && !strcmp(p, "log.txt")) setvbuf(f, NULL, _IONBF, 0);      /* game log: keep what was written before a crash */
     { static int n; if (n++ < 300) { fprintf(stderr, "[fopen] %s (%s) -> %s\n", mp ? mp : "(null)", m ? m : "?", f ? "ok" : "FAIL"); fflush(stderr); } }
 #endif
-    if (f && !inram && m && m[0] == 'r' && !(p && !strcmp(p, "log.txt"))) setvbuf(f, NULL, _IOFBF, 64 * 1024);   /* data files: read in 64 KB chunks (each memory-card read is slow) */
+    if (f && !inram && m && m[0] == 'r' && !(p && !strcmp(p, "log.txt"))) setvbuf(f, NULL, _IOFBF, 64 * 1024);
+    { size_t pl = p ? strlen(p) : 0;   /* save files: unbuffered, so a write is on the card at once (quitting can't lose it) */
+      if (f && m && (m[0] == 'w' || m[0] == 'a' || strchr(m, '+')) && pl > 4 && !strcmp(p + pl - 4, ".sav")) setvbuf(f, NULL, _IONBF, 0); }   /* data files: read in 64 KB chunks (each memory-card read is slow) */
     return f;
 }
 

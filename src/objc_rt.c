@@ -544,7 +544,16 @@ static int UIApplicationMain_impl(int argc, char **argv, id principal, id delega
     for (;;) {
         { extern unsigned long long gl_prof_now(void); extern void gl_note_poll(unsigned long long us);
           unsigned long long p0 = gl_prof_now();
-          if (platform_poll_quit()) break;
+          if (platform_poll_quit()) {   /* like iOS on Home / quit: let the game pause and save before the process ends */
+              fprintf(stderr, "[objc] quit: sending resign-active / background / terminate so the game saves\n"); fflush(stderr);
+              msg(delegate, "applicationWillResignActive:", app, 0, 0);
+              msg(delegate, "applicationDidEnterBackground:", app, 0, 0);
+              msg(delegate, "applicationWillTerminate:", app, 0, 0);
+              for (int k = 0; k < 60; k++) { mq_drain(); usleep(10000); }   /* ~0.6 s for the game thread's own save work */
+              fflush(NULL);
+              fprintf(stderr, "[objc] quit: done\n"); fflush(stderr);
+              break;
+          }
           touch_poll_dispatch();
           mq_drain();
           gl_note_poll(gl_prof_now() - p0); }
