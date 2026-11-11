@@ -545,13 +545,15 @@ static int UIApplicationMain_impl(int argc, char **argv, id principal, id delega
         { extern unsigned long long gl_prof_now(void); extern void gl_note_poll(unsigned long long us);
           unsigned long long p0 = gl_prof_now();
           if (platform_poll_quit()) {   /* like iOS on Home / quit: let the game pause and save before the process ends */
-              fprintf(stderr, "[objc] quit: sending resign-active / background / terminate so the game saves\n"); fflush(stderr);
+              /* resign-active pauses the game and runs its pause/save path. background/terminate are NOT sent: they tear
+               * objects down while the game thread is still running (it crashed on a freed object). Then end the process
+               * at once - no static destructors, no game thread touching freed memory. */
+              fprintf(stderr, "[objc] quit: sending applicationWillResignActive: so the game pauses and saves\n"); fflush(stderr);
               msg(delegate, "applicationWillResignActive:", app, 0, 0);
-              msg(delegate, "applicationDidEnterBackground:", app, 0, 0);
-              msg(delegate, "applicationWillTerminate:", app, 0, 0);
-              for (int k = 0; k < 60; k++) { mq_drain(); usleep(10000); }   /* ~0.6 s for the game thread's own save work */
+              for (int k = 0; k < 50; k++) { mq_drain(); usleep(10000); }   /* ~0.5 s for the game's save work */
               fflush(NULL);
               fprintf(stderr, "[objc] quit: done\n"); fflush(stderr);
+              { extern int sceKernelExitProcess(int); sceKernelExitProcess(0); }
               break;
           }
           touch_poll_dispatch();
